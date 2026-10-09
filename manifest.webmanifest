@@ -1,0 +1,17 @@
+{
+  "name": "STIMM Tournament Ranking",
+  "short_name": "STIMM",
+  "description": "Sticks In My Mouth — Our clan. Our code. Our victory. Neon vehicle-combat arena with ranked play and captain drafts.",
+  "lang": "en",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b0614",
+  "theme_color": "#0b0614",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
