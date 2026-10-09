@@ -15,10 +15,13 @@ export const AVATARS = [
   { id: 'toxic', a: '#16301f', n: '#39ff6a', ach: 'level10' },
   { id: 'king', a: '#1a1626', n: '#ffb321', ach: 'first_win' },
   { id: 'ronin', a: '#3a0f1c', n: '#ff3b3b', ach: 'multi5' },
+  { id: 'dog', a: '#0f2433', n: '#22e5ff', ach: 'kills100' },
+  { id: 'snowman', a: '#e8e8f0', n: '#ff2bd6', ach: 'legendary' },
 ];
 export const AVK = AVATARS.map(a => a.id);
 
 const lam = (c, o = {}) => new THREE.MeshLambertMaterial({ color: c, ...o });
+const dk2 = () => lam(0x4a2f1a);
 const neonM = c => new THREE.MeshBasicMaterial({ color: c });
 const B = (w, h, d) => new THREE.BoxGeometry(w, h, d);
 const S = (r, ws = 10, hs = 8) => new THREE.SphereGeometry(r, ws, hs);
@@ -105,6 +108,29 @@ export function buildAvatar(av) {
       const sw = new THREE.Group(); sw.position.set(.1, .9, -.5); sw.rotation.z = .6; body.add(sw);
       add(sw, B(.07, 1.7, .02), lam(0xdfe6ee, { emissive: 0x222222 }), 0, .55, 0); add(sw, B(.05, 1.6, .025), neon, .04, .55, 0, 0, 0, 0, .3, 1, 1);
       add(sw, B(.25, .05, .1), gold, 0, -.32, 0); add(sw, C(.04, .04, .45, 6), black, 0, -.57, 0); break; }
+    case 'dog': {
+      const fur = lam(0xb5793f), fur2 = lam(0xf0d2a8), dk = lam(0x4a2a14);
+      add(head, S(.36, 10, 8), fur, 0, 0, 0, 0, 0, 0, 1, 1, 1.02);
+      add(head, S(.2, 8, 6), fur2, 0, -.12, .27, 0, 0, 0, 1.05, .78, 1.05); add(head, S(.06, 6, 5), black, 0, -.03, .47, 0, 0, 0, 1.3, 1, 1);
+      add(head, S(.12, 8, 6), fur2, -.12, .12, .25, 0, 0, 0, 1, 1, .5);
+      const ears = []; for (const s of [-1, 1]) { const e = new THREE.Group(); e.position.set(s * .3, .2, -.02); head.add(e); add(e, B(.14, .42, .2), dk, s * .05, -.18, 0, 0, 0, s * .25); add(e, B(.03, .3, .02), neon, s * .06, -.16, .11, 0, 0, s * .25); ears.push(e); }
+      g.userData.ears = ears;
+      headset(); add(head, B(.5, .07, .12), neon, 0, .25, .25, -.35); // visor relevée
+      for (const s of [-1, 1]) eyes.push(add(head, S(.05, 6, 5), black, s * .13, .08, .32));
+      add(body, new THREE.TorusGeometry(.3, .05, 6, 16), neon, 0, 1.16, 0, Math.PI / 2); add(body, C(.08, .08, .03, 10), gold, 0, 1.0, .33, Math.PI / 2);
+      break; }
+    case 'snowman': {
+      const snow = lam(0xf4f8ff, { emissive: 0x202838 });
+      add(body, S(.8, 12, 10), snow, 0, .55, 0, 0, 0, 0, 1, .85, .9);
+      for (let i = 0; i < 3; i++) add(body, S(.05, 6, 5), black, 0, .45 + i * .22, .7 - i * .03);
+      add(head, S(.36, 12, 10), snow);
+      add(head, K(.06, .32, 8), lam(0xff7a1f), 0, -.03, .46, Math.PI / 2);
+      for (const s of [-1, 1]) eyes.push(add(head, S(.05, 6, 5), black, s * .12, .09, .32));
+      const hat = new THREE.Group(); hat.position.set(0, .3, 0); hat.rotation.z = -.12; head.add(hat);
+      add(hat, C(.36, .36, .04, 14), black, 0, 0, 0); add(hat, C(.24, .24, .42, 14), black, 0, .22, 0); add(hat, C(.245, .245, .07, 14), neon, 0, .06, 0);
+      add(body, new THREE.TorusGeometry(.32, .08, 6, 16), neon, 0, 1.12, 0, Math.PI / 2); add(body, B(.16, .5, .05), neon, .2, .85, .35, -.2, 0, .15);
+      for (const s of [-1, 1]) add(body, C(.03, .03, .8, 5), dk2(), s * .85, .9, 0, 0, 0, s * 1.0);
+      break; }
     case 'gamer': default: {
       hood(); humanHead(); mask(); headset(); visorBand(.06, .6); eyes.push(head.children[head.children.length - 1]); break; }
   }
@@ -116,6 +142,7 @@ export function buildAvatar(av) {
     head.position.y = 1.55 + Math.sin(t * 2) * .02 + Math.abs(Math.sin(t * 18)) * f.shake * .02;
     body.scale.set(1 + Math.sin(t * 2) * .012, 1 + Math.sin(t * 2) * .02, 1);
     neon.color.set(nc).multiplyScalar(.9 + Math.sin(t * 4) * .25);
+    if (g.userData.ears) g.userData.ears.forEach((e, i) => { e.rotation.x = Math.sin(t * 3 + i) * .18 - f.shake * .3; e.rotation.z = (i ? -1 : 1) * (.05 + Math.max(0, Math.sin(t * 1.7)) * .12); });
   };
   return g;
 }
@@ -125,7 +152,7 @@ export function disposeAvatar(g) { g.traverse(o => { if (o.isMesh) { o.geometry.
 /* ---------- Expressive face rig & emotes ---------- */
 export const EMOTES = ['suspicious', 'raised', 'smirk', 'disguise', 'starstruck', 'tongue', 'cool', 'kiss', 'laugh', 'party', 'rage', 'freezing', 'mindblown', 'huff', 'scream'];
 export const EMOJI = { suspicious: '🧐', raised: '🤨', smirk: '😏', disguise: '🥸', starstruck: '🤩', tongue: '😝', cool: '😎', kiss: '😘', laugh: '😂', party: '🥳', rage: '🤬', freezing: '🥶', mindblown: '🤯', huff: '😤', scream: '😱' };
-const FACE = { chicken: { ey: .1, ez: .36, sp: .14, my: -.24, mz: .36, by: .26 }, shark: { ey: .1, ez: .4, sp: .17, my: -.07, mz: .45, by: .22 }, teddy: { ey: .08, ez: .35, sp: .13, my: -.2, mz: .38, by: .2 }, def: { ey: .06, ez: .33, sp: .12, my: -.17, mz: .4, by: .17 } };
+const FACE = { dog: { ey: .1, ez: .33, sp: .14, my: -.24, mz: .46, by: .21 }, snowman: { ey: .1, ez: .33, sp: .12, my: -.16, mz: .35, by: .21 }, chicken: { ey: .1, ez: .36, sp: .14, my: -.24, mz: .36, by: .26 }, shark: { ey: .1, ez: .4, sp: .17, my: -.07, mz: .45, by: .22 }, teddy: { ey: .08, ez: .35, sp: .13, my: -.2, mz: .38, by: .2 }, def: { ey: .06, ez: .33, sp: .12, my: -.17, mz: .4, by: .17 } };
 // neutral params
 const N0 = () => ({ bLy: 0, bRy: 0, bLr: 0, bRr: 0, eL: 1, eR: 1, curve: 0, open: 0, ow: 1, mRot: 0, tilt: 0, shake: 0, eW: 1 });
 const EMO = {

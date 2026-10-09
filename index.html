@@ -15,12 +15,12 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <style>
-:root{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);--sal:env(safe-area-inset-left,0px);--sar:env(safe-area-inset-right,0px);--acc:#ff4d2e;--acc2:#ffc21f;--bleu:#2fa8ff}
+:root{--ist:env(safe-area-inset-top,0px);--isb:env(safe-area-inset-bottom,0px);--isl:env(safe-area-inset-left,0px);--isr:env(safe-area-inset-right,0px);--edge:0px;--hs:1;--bs:1;--bo:.9;--sat:calc(var(--ist) + var(--edge));--sab:calc(var(--isb) + var(--edge));--sal:calc(var(--isl) + var(--edge));--sar:calc(var(--isr) + var(--edge));--vvh:100dvh;--acc:#ff4d2e;--acc2:#ffc21f;--bleu:#2fa8ff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;background:#0a1626;overscroll-behavior:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Segoe UI",Roboto,system-ui,sans-serif;color:#fff}
-body{position:fixed;inset:0}
-canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:calc(var(--sat) + 10px) calc(var(--sar) + 14px) calc(var(--sab) + 10px) calc(var(--sal) + 14px);background:linear-gradient(90deg,rgba(5,12,24,.85),rgba(5,12,24,.35));z-index:20}
+html,body{margin:0;height:100%;height:var(--vvh);overflow:hidden;background:#0a1626;overscroll-behavior:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Rounded","Segoe UI",Roboto,system-ui,sans-serif;color:#fff}
+body{position:fixed;left:0;top:0;width:100%;height:var(--vvh)}
+canvas#c{position:fixed;left:0;top:0;width:100%;height:var(--vvh);display:block;touch-action:none}
+.screen{position:fixed;left:0;top:0;width:100%;height:var(--vvh);display:none;align-items:center;justify-content:center;padding:calc(var(--sat) + 10px) calc(var(--sar) + 14px) calc(var(--sab) + 10px) calc(var(--sal) + 14px);background:linear-gradient(90deg,rgba(5,12,24,.85),rgba(5,12,24,.35));z-index:20}
 .screen.on{display:flex;animation:fade .25s ease}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .panel{width:100%;max-width:460px;max-height:100%;display:flex;flex-direction:column;gap:8px;background:rgba(8,18,34,.82);border:2px solid rgba(255,255,255,.12);border-radius:20px;padding:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
@@ -62,7 +62,7 @@ h2{margin:0;font-size:26px;font-weight:900;font-style:italic;letter-spacing:-.3p
 .tbl b{color:var(--acc2);text-align:right}
 input[type=text]{font:inherit;font-size:17px;font-weight:800;padding:10px 12px;border-radius:12px;border:2px solid rgba(255,255,255,.25);background:rgba(0,0,0,.3);color:#fff;width:100%;user-select:text;-webkit-user-select:text}
 /* HUD */
-#hud{position:fixed;inset:0;display:none;z-index:10;pointer-events:none}
+#hud{position:fixed;left:0;top:0;width:100%;height:var(--vvh);display:none;z-index:10;pointer-events:none}
 #hud.on{display:block}
 #mini{position:absolute;left:calc(var(--sal) + 8px);top:calc(var(--sat) + 8px);width:112px;height:112px;border-radius:50%;background:rgba(5,12,24,.55);border:2px solid rgba(255,255,255,.25)}
 #moi{position:absolute;left:calc(var(--sal) + 130px);top:calc(var(--sat) + 8px);width:190px;font-size:12px;font-weight:900}
@@ -110,6 +110,7 @@ input[type=text]{font:inherit;font-size:17px;font-weight:800;padding:10px 12px;b
 #tourne .tel{width:60px;height:100px;border:5px solid #fff;border-radius:12px;animation:rot 1.8s ease-in-out infinite}
 @keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
 @media (orientation:portrait) and (pointer:coarse){#tourne{display:flex}}
+body.portrait #tourne{display:flex}
 @media (max-height:360px){.logo b{font-size:50px}.btn.big{min-height:50px}}
 
 .tb em{font-style:normal}
@@ -283,6 +284,63 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
 
 #sndInd{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none}
 #sndInd i{position:absolute;left:-45px;top:-14px;width:90px;height:28px;border-top:6px solid #ffaa28;border-radius:50% 50% 0 0/100% 100% 0 0;filter:drop-shadow(0 0 6px #ff7a1f);opacity:0;transition:opacity .1s}
+
+/* ===== Screen fit / HUD scale (display settings) ===== */
+.screen .panel{max-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
+.screen .cols{min-height:min-content}
+@media (max-height:440px){.panel{padding:10px;gap:6px}.btn{min-height:42px;padding:8px 12px;font-size:15px}.btn.big{min-height:48px;font-size:18px}h2{font-size:22px}.logo b{font-size:52px}}
+@media (max-height:380px){.panel{padding:8px;gap:5px}.btn{min-height:38px;font-size:14px}.btn.big{min-height:42px;font-size:16px}h2{font-size:19px}.logo b{font-size:42px}.avSlot.sm{width:76px;height:90px}.sub{font-size:12px}}
+#moi{left:calc(var(--sal) + 8px*var(--hs));top:calc(var(--sat) + 6px*var(--hs));scale:var(--hs);transform-origin:0 0}
+#top3{left:calc(var(--sal) + 8px*var(--hs));top:calc(var(--sat) + 52px*var(--hs));scale:var(--hs);transform-origin:0 0}
+#wep{top:calc(var(--sat) + 6px*var(--hs));scale:var(--hs);transform-origin:50% 0}
+#pauseB{right:calc(var(--sar) + 8px*var(--hs));top:calc(var(--sat) + 8px*var(--hs));scale:var(--hs);transform-origin:100% 0}
+#info{right:calc(var(--sar) + 60px*var(--hs));top:calc(var(--sat) + 5px*var(--hs));scale:var(--hs);transform-origin:100% 0;line-height:1.15;font-size:12px;max-width:220px}
+#info small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#emoBox{right:calc(var(--sar) + 8px*var(--hs));top:calc(var(--sat) + 66px*var(--hs));scale:var(--hs);transform-origin:100% 0}
+#mini{right:calc(var(--sar) + 112px*var(--hs));top:calc(var(--sat) + 66px*var(--hs));scale:var(--hs);transform-origin:100% 0}
+#emoBox.off~#mini,body.noemo #mini{right:calc(var(--sar) + 8px*var(--hs))}
+#bEmo{right:calc(var(--sar) + 222px*var(--hs));top:calc(var(--sat) + 70px*var(--hs));scale:var(--hs);transform-origin:100% 0}
+#emoBox.off~#bEmo,body.noemo #bEmo{right:calc(var(--sar) + 118px*var(--hs));top:calc(var(--sat) + 70px*var(--hs))}
+#feed{left:50%;right:auto;top:calc(var(--sat) + 52px*var(--hs));transform:translateX(-50%);align-items:center;scale:var(--hs);transform-origin:50% 0}
+#vitals{left:calc(var(--sal) + 10px*var(--hs));bottom:calc(var(--sab) + 8px*var(--hs));scale:var(--hs);transform-origin:0 100%}
+#joyHint{left:calc(var(--sal) + 36px*var(--hs));bottom:calc(var(--sab) + 72px*var(--hs));scale:var(--bs);transform-origin:0 100%}
+#joy{scale:var(--bs)}
+#btns{width:226px;height:170px;right:calc(var(--sar) + 12px*var(--bs));bottom:calc(var(--sab) + 10px*var(--bs));scale:var(--bs);transform-origin:100% 100%}
+.tb{opacity:var(--bo)}
+#aideClavier{bottom:calc(var(--sab) + 6px)}
+#fpsBox{position:fixed;left:50%;bottom:calc(var(--sab) + 4px);transform:translateX(-50%);z-index:30;font:800 11px ui-monospace,Menlo,monospace;color:#7af6ff;background:rgba(10,4,20,.6);border:1px solid rgba(34,229,255,.4);border-radius:8px;padding:2px 7px;pointer-events:none;display:none}
+body.showFps #fpsBox{display:block}
+/* HUD layout editor */
+#hudEdit{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:45;display:none;flex-direction:column;align-items:center;gap:8px;background:rgba(10,4,20,.88);border:1.5px solid rgba(255,43,214,.7);box-shadow:0 0 18px rgba(255,43,214,.5);border-radius:14px;padding:10px 14px;max-width:340px;text-align:center}
+#hudEdit .row{width:100%}
+body.hudEdit #hudEdit{display:flex}
+body.hudEdit #hud{display:block}
+body.hudEdit #hud *{pointer-events:none}
+body.hudEdit .hw{pointer-events:auto!important;outline:2px dashed rgba(34,229,255,.85);outline-offset:2px;cursor:move;touch-action:none;background-color:rgba(34,229,255,.08)}
+body.hudEdit .hw.drag{outline-color:#ff2bd6}
+body.hudEdit #feed:empty{width:200px;height:60px}
+body.hudEdit #top3:empty{width:170px;height:100px}
+body.hudEdit #info,body.hudEdit #wep{min-width:120px;min-height:40px}
+body.hudEdit #zoneJoy{display:none}
+body.hudEdit #emoBox.off{display:none}
+.dispGrid{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;font-size:13px;font-weight:800}
+.dispGrid label{color:#c9b8e8}.dispGrid output{min-width:46px;text-align:right;color:#7af6ff;font-variant-numeric:tabular-nums}
+.dispGrid input[type=range]{width:100%;accent-color:#ff2bd6;touch-action:pan-x;height:26px}
+.dispGrid .seg{grid-column:2/4}
+#pTabs{margin-bottom:2px}
+
+/* Gamepad */
+body.pad #zoneJoy,body.pad #joyHint,body.pad #btns,body.pad #aideClavier{display:none!important}
+#padHelp{display:none;position:fixed;right:calc(var(--sar) + 10px);bottom:calc(var(--sab) + 8px);max-width:min(46vw,420px);white-space:normal!important;text-align:right;line-height:1.9;z-index:11;font-size:11px;font-weight:800;color:#e9dcff;background:rgba(10,4,20,.6);border:1px solid rgba(155,92,255,.45);border-radius:10px;padding:3px 10px;white-space:nowrap;pointer-events:none}
+body.pad #hud.on~#padHelp{display:block}
+body.pad.showFps #fpsBox{bottom:calc(var(--sab) + 28px)}
+.gl{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 4px;border-radius:10px;background:#1c1530;border:1.5px solid #9b5cff;color:#fff;font-size:11px;font-weight:900;margin:0 2px;line-height:1}
+.gl.x{color:#7ab8ff;border-color:#7ab8ff}.gl.o{color:#ff6b7a;border-color:#ff6b7a}.gl.s{color:#ff8ad8;border-color:#ff8ad8}.gl.t{color:#5ff0c0;border-color:#5ff0c0}
+.padFocus{outline:3px solid #22e5ff!important;outline-offset:2px;box-shadow:0 0 16px rgba(34,229,255,.8)!important}
+#emoWheel button.hl{transform:scale(1.25);border-color:#22e5ff;box-shadow:0 0 16px #22e5ff}
+.padMap{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;font-size:13px;font-weight:800}
+.padMap button{min-width:92px;font:inherit;font-weight:900;padding:5px 8px;border-radius:10px;border:1.5px solid rgba(155,92,255,.55);background:rgba(155,92,255,.12);color:#fff}
+.padMap button.wait{border-color:#ffc21f;animation:blinkHp .5s infinite alternate}
 </style>
 </head>
 <body>
@@ -336,6 +394,7 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
   <div class="panel scroll">
     <h2 data-t="chooseVehicle">Choose your ride</h2>
     <div id="gModeW"><div class="seg" id="gMode"><button data-m="c" data-t="casual">Casual</button><button data-m="r" data-t="ranked">Ranked</button></div><p class="sub tiny" id="gModeNote"></p></div>
+    <div id="gMapW"><small data-t="map">Map</small><div class="seg" id="gMap"></div></div>
     <div class="vgrid" id="vgrid"></div>
     <p class="sub" id="vDesc"></p>
     <div id="vStats"></div>
@@ -382,6 +441,7 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
           <small id="lnNb"></small>
           <div id="lnHost">
             <small id="lnModeTxt"></small>
+            <small id="lnMapTxt"></small><div class="seg" id="lnMap"></div>
             <div class="seg" id="lnMode"><button data-m="c" data-t="casual">Casual</button><button data-m="r" data-t="ranked">Ranked</button></div>
             <small data-t="totalVehicles">Vehicles in the match</small>
             <div class="seg" id="lnSlots"><button data-n="4">4</button><button data-n="6">6</button><button data-n="8">8</button><button data-n="10">10</button></div>
@@ -417,8 +477,9 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
 
 <div class="screen" id="sParam">
   <div class="panel wide scroll">
-    <h2 data-t="settings">Settings</h2>
-    <div class="cols">
+    <div class="hrow"><h2 data-t="settings">Settings</h2><button class="mini" id="bRetour3b" data-t="back">Back</button></div>
+    <div class="seg" id="pTabs"><button data-p="gen" data-t="general">General</button><button data-p="disp" data-t="display">Display</button><button data-p="ctl" data-t="controls">Controls</button></div>
+    <div class="cols" id="pGen">
       <div class="colL">
         <label class="sub" for="iPseudo" data-t="pilotName">Driver name</label>
         <input type="text" id="iPseudo" maxlength="12" autocomplete="off" data-ph="namePh">
@@ -436,6 +497,49 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
         <button class="btn ghost" id="bRetour3" data-t="back">Back</button>
       </div>
     </div>
+    <div class="cols" id="pCtl" style="display:none">
+      <div class="colL">
+        <small data-t="touchCtl">Touch controls</small>
+        <div class="dispGrid">
+          <label for="cDz" data-t="deadZone">Dead zone</label><input type="range" id="cDz" min="5" max="40" step="1"><output id="oDz"></output>
+          <label for="cSens" data-t="sensitivity">Steering sensitivity</label><input type="range" id="cSens" min="50" max="160" step="5"><output id="oSens"></output>
+          <label data-t="autoAccel">Auto-accelerate</label><div class="seg" id="cAuto"><button data-v="1" data-t="on">On</button><button data-v="0" data-t="off">Off</button></div>
+        </div>
+        <p class="sub tiny" data-t="touchNote"></p>
+      </div>
+      <div class="colR">
+        <small data-t="gamepad">Controller</small>
+        <p class="sub tiny" id="padStat"></p>
+        <div id="padMap" class="padMap"></div>
+        <button class="btn ghost" id="bPadReset" data-t="padReset">Reset controller mapping</button>
+      </div>
+    </div>
+    <div class="cols" id="pDisp" style="display:none">
+      <div class="colL">
+        <small data-t="dispHud">HUD &amp; controls</small>
+        <div class="dispGrid">
+          <label for="dHs" data-t="hudScale">HUD scale</label><input type="range" id="dHs" min="60" max="140" step="5"><output id="oHs"></output>
+          <label for="dBs" data-t="btnSize">Button size</label><input type="range" id="dBs" min="60" max="150" step="5"><output id="oBs"></output>
+          <label for="dBo" data-t="btnOpacity">Button opacity</label><input type="range" id="dBo" min="25" max="100" step="5"><output id="oBo"></output>
+          <label for="dEdge" data-t="edgeMargin">Edge margin</label><input type="range" id="dEdge" min="0" max="48" step="2"><output id="oEdge"></output>
+          <label data-t="joystick">Joystick</label><div class="seg" id="dJoy"><button data-j="float" data-t="joyFloat">Floating</button><button data-j="fixed" data-t="joyFixed">Fixed</button></div>
+        </div>
+        <div class="row"><button class="btn neon" id="bHudEdit" data-t="editHud">Edit HUD layout</button><button class="btn ghost" id="bHudReset" data-t="resetHud">Reset</button></div>
+        <p class="sub tiny" data-t="dispNote"></p>
+      </div>
+      <div class="colR">
+        <small data-t="dispView">View &amp; performance</small>
+        <div class="dispGrid">
+          <label for="dFov" data-t="fov">Field of view</label><input type="range" id="dFov" min="-12" max="20" step="1"><output id="oFov"></output>
+          <label for="dCam" data-t="camDist">Camera distance</label><input type="range" id="dCam" min="70" max="150" step="5"><output id="oCam"></output>
+          <label for="dRes" data-t="resScale">Resolution</label><input type="range" id="dRes" min="50" max="100" step="5"><output id="oRes"></output>
+          <label data-t="dynRes">Dynamic res.</label><div class="seg" id="dDyn"><button data-v="1" data-t="on">On</button><button data-v="0" data-t="off">Off</button></div>
+          <label data-t="fpsCounter">FPS counter</label><div class="seg" id="dFps"><button data-v="1" data-t="on">On</button><button data-v="0" data-t="off">Off</button></div>
+        </div>
+        <p class="sub tiny" id="dInfo"></p>
+        <button class="btn ghost" id="bDispDef" data-t="dispDefaults">Restore display defaults</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -444,7 +548,7 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
     <h2 data-t="pause">Paused</h2>
     <p class="sub" id="pauseNote" data-t="pauseNote"></p>
     <button class="btn big" id="bReprendre" data-t="resume">Resume</button>
-    <div class="row"><button class="btn sec" id="bSonP">Sound</button><button class="btn rouge" id="bQuitter" data-t="quit">Quit</button></div>
+    <div class="row"><button class="btn sec" id="bSonP">Sound</button><button class="btn ghost" id="bHudEditP" data-t="editHud">Edit HUD layout</button><button class="btn rouge" id="bQuitter" data-t="quit">Quit</button></div>
   </div>
 </div>
 
@@ -507,6 +611,9 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
   </div>
 </div>
 <div id="emoWheel"></div>
+<div id="hudEdit"><b data-t="editHud">Edit HUD layout</b><small class="sub tiny" data-t="editHudSub"></small><div class="row"><button class="btn ghost" id="bHeReset" data-t="resetHud">Reset</button><button class="btn" id="bHeDone" data-t="done">Done</button></div></div>
+<div id="fpsBox"></div>
+<div id="padHelp"></div>
 <div id="toast"></div>
 <div id="cineBars"><i></i><i></i></div>
 <div id="flash"></div>
@@ -514,6 +621,6 @@ img.pav{width:30px;height:30px;border-radius:8px;background:rgba(155,92,255,.18)
 <div id="tourne"><div class="tel"></div><span data-t="rotate">Turn your phone sideways</span><small style="font-weight:600;font-size:14px;color:#9fb8d4" data-t="rotateSub"></small></div>
 
 <script type="importmap">{"imports":{"three":"./three.module.min.js","three/addons/":"./addons/"}}</script>
-<script type="module" src="game.js"></script>
+<script type="module" src="game.js?v=20261009"></script>
 </body>
 </html>
