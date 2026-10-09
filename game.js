@@ -1591,9 +1591,9 @@ function megaAttack(c) {
 }
 function updMegas(dt) {
   for (let i = G.megas.length - 1; i >= 0; i--) { const m = G.megas[i]; m.t -= dt; if (m.t > 0) continue; G.megas.splice(i, 1);
-    for (const o of G.cars) { if (o === m.c || !o.alive) continue; const dx = o.pos.x - m.x, dz = o.pos.z - m.z, d = Math.hypot(dx, dz) || 1; if (d > 30) continue; const f = 1 - .5 * d / 30;
+    for (const o of G.cars) { if (o === m.c || !o.alive) continue; const dx = o.pos.x - m.x, dz = o.pos.z - m.z, d = Math.hypot(dx, dz) || 1; if (d > 40) continue; const f = 1 - .5 * d / 40;
       damage(o, 140 * f * m.c.dmgMul, m.c); if (!o.alive) continue; o.vx += dx / d * 30 * f / o.st.masse; o.vz += dz / d * 30 * f / o.st.masse; o.vy = 14 * f; o.onGround = false; o.pos.y += .05; }
-    for (const p of props) if (p.on && Math.hypot(p.x - m.x, p.z - m.z) < 30) breakProp(p, m.c); }
+    for (const p of props) if (p.on && Math.hypot(p.x - m.x, p.z - m.z) < 40) breakProp(p, m.c); }
 }
 function updMegaFx(dt) {
   for (let i = megaFx.length - 1; i >= 0; i--) { const f = megaFx[i]; f.t += dt; if (f.t < 0) { f.m.visible = false; continue; } f.m.visible = true; const k = f.t / f.life;
